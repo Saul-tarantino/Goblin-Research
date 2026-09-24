@@ -13,7 +13,7 @@ Dr. Jin对于处于人类社会的一种神秘生物Goblin进行了细致的研�
 
 ---
 
-![Dr. Jin](./Dr. Jin.png)
+![Dr. Jin](./Dr.Jin.png)
 
 <center> Dr. Jin </center>
 
