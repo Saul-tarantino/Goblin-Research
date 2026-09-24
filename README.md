@@ -37,10 +37,14 @@ Dr. Jin 第一次遇见 Goblin，是他的高中时期，当时他仅仅只是�
 ## 三、样本 Goblin介绍
 
 1. **Goblin Huang**:最早被发现的一只Goblin，在中国杭州活动，被认为有着最标准的Goblin基本特征，是Dr. Jin最初的研究样本。
+
+   ![Goblin Huang](./Goblin-huang.png)
+
 2. **Goblin Fang**：体型较小的一只Goblin，在中国北京活动，与Goblin Huang有着较大的生活习性差异，进场与Goblin Lin同时出现，Dr. Jin认为其是Goblin Lin的跟班。
+
 3. **Goblin Lin**：与Goblin Fang一起被Dr. Jin所发现，在中国北京活动，与Goblin Fang的习性相似，Dr. Jin经过简单评估认为其已经开始初步模仿人类的行为。
 
-# 
+   ![Goblin Fang and Goblin Lin](./Goblin-fang-lin.png)
 
 ## 四、主要研究成果：Goblin行为分析🔬
 
