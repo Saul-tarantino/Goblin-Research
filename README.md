@@ -5,6 +5,8 @@ Dr. Jin对于处于人类社会的一种神秘生物Goblin进行了细致的研�
 
 ![Goblin](./Goblin.jpg)
 
+<center> Goblin in people's imagination </center>
+
 # Dr. Jin 研究了多年 Goblin，获得2026年 Nobel Prize in Physiology or Medicine 🏆
 
 > 斯德哥尔摩快讯：
@@ -36,25 +38,31 @@ Dr. Jin 第一次遇见 Goblin，是他的高中时期，当时他仅仅只是�
 
    ![Goblin Huang](./Goblin-huang.png)
 
+   <center> Photo of Goblin Huang by Dr. Jin </center>
+
+   
+
 2. **Goblin Fang**：体型较小的一只Goblin，在中国北京活动，与Goblin Huang有着较大的生活习性差异，进场与Goblin Lin同时出现，Dr. Jin认为其是Goblin Lin的跟班。
 
 3. **Goblin Lin**：与Goblin Fang一起被Dr. Jin所发现，在中国北京活动，与Goblin Fang的习性相似，Dr. Jin经过简单评估认为其已经开始初步模仿人类的行为。
 
    ![Goblin Fang and Goblin Lin](./Goblin-fang-lin.png)
+   
+   <center> Photo of Goblin Lin and Goblin Fang by Dr. Jin </center>
 
-## 四、主要研究成果：Goblin行为分析🔬
+## 四、研究成果：Goblin行为分析🔬
 
-### 1. 发现了“算了神经元” 🧠
+### 1. Goblin的居住环境
 
-Dr. Jin 在 Goblin 大脑中定位到一组特殊神经元，命名为：
+Dr. Jin 经过漫长的跟踪，最终发现了Goblin的巢穴，并且他称其为：
 
-**FIN，Forget It Neuron，算了神经元。**
+**Gobliar**
 
-当 Goblin 即将卷入一场毫无意义的争吵时，该神经元会迅速放电，使个体停止辩论，并说出经典语句：
+![Gobliar in Shanghai China](./Gobliar.png)
 
-> “行吧，你说得都对。”
+<center> Gobliar in Shanghai China </center>
 
-实验显示，Goblin 从愤怒到放弃争论平均只需 **0.2 秒**。人类则需要三到五个工作日，通常还会单独拉一个群继续讨论。📱
+
 
 ### 2. 建立了“瞎乐经济学” 💰
 
