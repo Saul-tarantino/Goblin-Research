@@ -154,3 +154,10 @@ Journal of Extremely Reluctant Anthropology, 42(7), 1–666.
 
 ---
 
+## 六、帮助Dr. Jin发现更多Goblin
+
+显然，在人类社会中存在着不少Goblin，它们或许已经融入了人类社会许多年，但是为了科学的进步以及人类文明的发展，全球范围内以Dr. Jin为代表的Goblinsage创立了基金会——The Goblindewell Foundation，为了更好的研究这个新发现的物种同时保护它们免受人为的伤害。
+
+[Click here](./Goblindwell-Foundation-Charter.md) to know more about The Goblindewell Foundation!
+
+此外，你也可以在这个仓库的issue界面里直接上传你所发现的Goblin，Dr. Jin会对你所提供的信息进行分析，感谢你为人类进步做出的贡献。
