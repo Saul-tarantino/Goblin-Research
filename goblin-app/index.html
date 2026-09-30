@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哥布林探测器 · Goblin Detector</title>
+<style>
+  :root {
+    --bg: #101713;
+    --panel: #1a2420;
+    --panel2: #223029;
+    --line: #33453c;
+    --text: #e6efe9;
+    --muted: #9ab3a6;
+    --green: #6fce8f;
+    --green-bright: #8ff0ac;
+    --amber: #e8c468;
+    --red: #e0705a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(1200px 700px at 50% -10%, #1d2b24 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 64px;
+    line-height: 1.6;
+  }
+  .wrap { width: 100%; max-width: 620px; }
+
+  header { text-align: center; margin-bottom: 8px; }
+  .goblin-face { font-size: 64px; display: block; margin-bottom: 6px; }
+  h1 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 1px;
+    color: var(--green-bright);
+  }
+  .subtitle { color: var(--muted); margin: 6px 0 0; font-size: 14px; }
+  .disclaimer {
+    margin: 18px auto 0;
+    max-width: 480px;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 22px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.35);
+  }
+  .card h2 { margin: 0 0 14px; font-size: 17px; color: var(--green-bright); }
+
+  label { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+  input[type="text"] {
+    width: 100%;
+    padding: 11px 13px;
+    font-size: 15px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #0e1512;
+    color: var(--text);
+    outline: none;
+  }
+  input[type="text"]:focus { border-color: var(--green); }
+
+  .file-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .file-btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .file-btn input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .file-hint { font-size: 12px; color: var(--muted); }
+  #preview {
+    margin-top: 12px;
+    max-width: 180px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    display: none;
+  }
+
+  .btn-primary {
+    margin-top: 22px;
+    width: 100%;
+    padding: 13px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0a120d;
+    background: linear-gradient(180deg, var(--green-bright), var(--green));
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 2px;
+  }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  /* scanning */
+  #scan {
+    display: none;
+    margin-top: 22px;
+    text-align: center;
+  }
+  .bar {
+    height: 10px;
+    border-radius: 999px;
+    background: #0e1512;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green), var(--green-bright));
+    transition: width .18s ease;
+  }
+  .scan-msg { color: var(--muted); font-size: 13px; min-height: 22px; }
+
+  /* result */
+  #result { display: none; margin-top: 22px; }
+  .score-row { display: flex; align-items: baseline; gap: 8px; }
+  .score {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--green-bright);
+    line-height: 1;
+  }
+  .score-unit { color: var(--muted); }
+  .verdict {
+    margin: 14px 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--amber);
+  }
+  .detail { font-size: 14px; color: var(--text); }
+  .detail .k { color: var(--muted); }
+  .quote {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--green);
+    background: var(--panel2);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 18px; }
+  .btn-secondary {
+    flex: 1;
+    padding: 11px;
+    font-size: 14px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--green); }
+  .btn-shout { border-color: var(--red); color: #ffc4b8; }
+
+  .ghost {
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .ghost.gone {
+    opacity: 0;
+    transform: translateX(40px) rotate(3deg);
+    pointer-events: none;
+  }
+  .vanished-note {
+    display: none;
+    margin-top: 16px;
+    color: var(--red);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+  footer a { color: var(--green); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="goblin-face">🧌</span>
+    <h1>哥布林探测器</h1>
+    <p class="subtitle">Goblin Detector · Dr. Jin 出品 · 2026 年诺贝尔生理学或医学奖得主亲自监制</p>
+    <p class="disclaimer">⚠️ 本探测器仅供娱乐，检测结果不构成学术结论。若被测者声称"我不是哥布林"，
+      请参考哥布林语第八声调："我刚才在开玩笑。如果你生气，那我就没开玩笑。"</p>
+  </header>
+
+  <div class="card">
+    <h2>📋 录入样本信息</h2>
+    <label for="name">姓名（喊出全名将触发"点名消失反射"）</label>
+    <input type="text" id="name" placeholder="例如：张三、Goblin Huang…" autocomplete="off">
+
+    <label>照片（可选，用于测算绿色像素占比）</label>
+    <div class="file-row">
+      <span class="file-btn">
+        选择照片
+        <input type="file" id="photo" accept="image/*">
+      </span>
+      <span class="file-hint" id="fileHint">未选择照片</span>
+    </div>
+    <img id="preview" alt="预览">
+
+    <button class="btn-primary" id="detectBtn">🔍 开始检测</button>
+  </div>
+
+  <div id="scan">
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    <div class="scan-msg" id="scanMsg">正在初始化探测器…</div>
+  </div>
+
+  <div id="result" class="card ghost">
+    <h2>📊 检测报告</h2>
+    <div class="score-row">
+      <span class="score" id="score">0</span>
+      <span class="score-unit">% 哥布林指数</span>
+    </div>
+    <div class="verdict" id="verdict"></div>
+    <div class="detail" id="detail"></div>
+    <div class="quote" id="quote"></div>
+    <div class="btn-row">
+      <button class="btn-secondary btn-shout" id="shoutBtn">🔊 喊出全名</button>
+      <button class="btn-secondary" id="againBtn">🔄 再次检测</button>
+    </div>
+  </div>
+  <div class="vanished-note" id="vanishedNote">他往那边走了 →</div>
+
+  <footer>
+    哥布林蛰居静缓研究基金会 · The Goblindwell Foundation<br>
+    <a href="../README.md">← 返回 Goblin-Research</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var nameInput = document.getElementById('name');
+  var photoInput = document.getElementById('photo');
+  var fileHint = document.getElementById('fileHint');
+  var preview = document.getElementById('preview');
+  var detectBtn = document.getElementById('detectBtn');
+  var scan = document.getElementById('scan');
+  var barFill = document.getElementById('barFill');
+  var scanMsg = document.getElementById('scanMsg');
+  var result = document.getElementById('result');
+  var scoreEl = document.getElementById('score');
+  var verdictEl = document.getElementById('verdict');
+  var detailEl = document.getElementById('detail');
+  var quoteEl = document.getElementById('quote');
+  var shoutBtn = document.getElementById('shoutBtn');
+  var againBtn = document.getElementById('againBtn');
+  var vanishedNote = document.getElementById('vanishedNote');
+
+  var imageData = null; // sampled {greenRatio} or null
+
+  // 扫描假文案
+  var scanMessages = [
+    '正在比对九声调声纹…',
+    '正在测量绿色像素占比…',
+    '正在评估无意义缓冲指数…',
+    '正在检查"刚才不在这里"状态…',
+    '正在与三只已知样本交叉比对…',
+    '正在征求第八声调意见…',
+    '正在等待第九声调回复（它没有声音）…',
+    '报告即将生成…'
+  ];
+
+  // 随机学术结语
+  var quotes = [
+    '第九声调没有声音。它的含义是："不要问。"',
+    '一个社会如果完全没有无意义的东西，最后就会有意义地崩溃。',
+    '社会韧性 = 有效制度 × 幽默冗余 ÷ 严肃会议数量。',
+    '98.7% 的哥布林在被完整叫出姓名后，会立即进入"刚才不在这里"状态。',
+    '建议使用更温和的称呼："那位不愿意透露姓名的绿色同事。"',
+    '它喜欢人类吃剩的外卖，一周少于五次会郁郁寡欢。',
+    '它躲藏得很好，几乎没有人注意到它——除了 Dr. Jin。',
+    '真实的 Gobliar 与人类幻想中的巢穴高度相似，或许幻想并非虚构。'
+  ];
+
+  // 已知样本名
+  var knownGoblins = [
+    { key: '黄', label: 'Goblin Huang（杭州，最标准样本）' },
+    { key: '方', label: 'Goblin Fang（北京，疑似跟班）' },
+    { key: '林', label: 'Goblin Lin（北京，已初步模仿人类行为）' }
+  ];
+
+  // djb2 哈希
+  function hashName(s) {
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) {
+      h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+    }
+    return h;
+  }
+
+  function sampleGreenRatio(img) {
+    var size = 120;
+    var c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    var ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0, size, size);
+    var d;
+    try { d = ctx.getImageData(0, 0, size, size).data; }
+    catch (e) { return null; }
+
+    var total = 0, green = 0;
+    for (var i = 0; i < d.length; i += 4) {
+      var r = d[i], g = d[i + 1], b = d[i + 2];
+      total++;
+      if (g > r + 10 && g > b + 10) green++;
+    }
+    return green / total;
+  }
+
+  function buildResult(name, greenRatio) {
+    var base;
+    if (name && name.trim()) {
+      base = 40 + (hashName(name) % 56); // 40 ~ 95
+    } else {
+      base = 45 + Math.floor(Math.random() * 11); // 45 ~ 55
+    }
+
+    var boost = 0;
+    if (greenRatio !== null) {
+      boost = Math.round(greenRatio * 100 * 0.35); // 最多 +35
+    }
+    var index = Math.max(0, Math.min(99, base + boost));
+    // 结尾确定性微调，保证看起来精确
+    var decimal = (hashName(name || '未命名') % 10) / 10;
+    var display = (index + decimal).toFixed(1);
+
+    // 判定
+    var verdict;
+    if (index >= 90) verdict = '已确认是哥布林（但它刚才不在这里了）';
+    else if (index >= 70) verdict = '高度疑似哥布林';
+    else verdict = '疑似哥布林';
+
+    // 详情行
+    var lines = [];
+    if (name && name.trim()) {
+      lines.push('<span class="k">姓名：</span>' + escapeHtml(name.trim()));
+    } else {
+      lines.push('<span class="k">姓名：</span>（未提供，默认按"无名哥布林"处理）');
+    }
+    if (greenRatio !== null) {
+      lines.push('<span class="k">绿色像素占比：</span>' + (greenRatio * 100).toFixed(1) + '%（该值越高，越符合哥布林体表特征）');
+    } else {
+      lines.push('<span class="k">绿色像素占比：</span>未提供照片，跳过体表比对');
+    }
+
+    var matched = knownGoblins.filter(function (g) {
+      return name && name.indexOf(g.key) !== -1;
+    });
+    if (matched.length) {
+      var labels = matched.map(function (g) { return g.label; }).join('、');
+      lines.push('<span class="k">已知样本比对：</span>命中 ' + labels + '，判定与已知样本同宗。');
+    } else if (name && name.trim()) {
+      lines.push('<span class="k">已知样本比对：</span>未命中，属于未被记录的新样本（请上传至仓库 issue 供 Dr. Jin 分析）。');
+    }
+
+    return {
+      display: display,
+      verdict: verdict,
+      detailHtml: lines.join('<br>'),
+      quote: quotes[hashName(name || 'goblin') % quotes.length]
+    };
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function runScan(cb) {
+    result.style.display = 'none';
+    vanishedNote.style.display = 'none';
+    scan.style.display = 'block';
+    detectBtn.disabled = true;
+
+    var step = 0;
+    var total = scanMessages.length;
+    var fill = 0;
+    barFill.style.width = '0%';
+
+    var timer = setInterval(function () {
+      scanMsg.textContent = scanMessages[Math.min(step, total - 1)];
+      fill = Math.min(100, Math.round((step + 1) / total * 100));
+      barFill.style.width = fill + '%';
+      step++;
+      if (step > total) {
+        clearInterval(timer);
+        setTimeout(function () {
+          scan.style.display = 'none';
+          detectBtn.disabled = false;
+          cb();
+        }, 200);
+      }
+    }, 220);
+  }
+
+  function showResult(name, greenRatio) {
+    var r = buildResult(name, greenRatio);
+    scoreEl.textContent = r.display;
+    verdictEl.textContent = r.verdict;
+    detailEl.innerHTML = r.detailHtml;
+    quoteEl.textContent = r.quote;
+
+    result.classList.remove('gone');
+    result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function detect() {
+    var name = nameInput.value;
+    var greenRatio = imageData ? imageData.greenRatio : null;
+    runScan(function () {
+      showResult(name, greenRatio);
+    });
+  }
+
+  photoInput.addEventListener('change', function () {
+    var f = photoInput.files && photoInput.files[0];
+    if (!f) { fileHint.textContent = '未选择照片'; preview.style.display = 'none'; imageData = null; return; }
+    fileHint.textContent = f.name;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        imageData = { greenRatio: sampleGreenRatio(img) };
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  detectBtn.addEventListener('click', detect);
+  nameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') detect();
+  });
+
+  shoutBtn.addEventListener('click', function () {
+    result.classList.add('gone');
+    vanishedNote.style.display = 'block';
+    vanishedNote.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  againBtn.addEventListener('click', function () {
+    result.classList.add('gone');
+    setTimeout(function () {
+      result.style.display = 'none';
+      vanishedNote.style.display = 'none';
+      nameInput.value = '';
+      photoInput.value = '';
+      fileHint.textContent = '未选择照片';
+      preview.style.display = 'none';
+      imageData = null;
+      nameInput.focus();
+    }, 300);
+  });
+})();
+</script>
+</body>
+</html>
