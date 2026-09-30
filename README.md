@@ -255,7 +255,5 @@ Journal of Extremely Reluctant Anthropology, 42(7), 1–666.
 
 ## 七、哥布林探测器 🧌
 
-不确定身边的某人是不是哥布林？试试 Dr. Jin 监制的[哥布林探测器](https://saul-tarantino.github.io/Goblin-Research/goblin-app/)：
+不确定身边的某人是不是哥布林？试试 Dr. Jin 监制的[哥布林探测器](https://saul-tarantino.github.io/Goblin-Research/index.html)：
 输入姓名、可选上传照片，即可生成检测报告，喊出全名还会触发“点名消失反射”。
-
-[👉 打开哥布林探测器](https://saul-tarantino.github.io/Goblin-Research/goblin-app/)
